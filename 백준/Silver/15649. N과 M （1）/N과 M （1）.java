@@ -10,15 +10,18 @@ public class Main {
 	static boolean[] isSelected;
 	static int[] arr;
 	
+	static StringBuilder sb = new StringBuilder();
+	
 	static void dfs(int cnt){
 		
 		if (cnt == M) {
-			for(int i = 0; i < M; i++){
+		for(int i = 0; i < M; i++){
 				
-				System.out.print(arr[i] +" ");
+				sb.append(arr[i]).append(' ');
+				//System.out.print(arr[i] +" ");
 				
 			}
-			System.out.println();
+			sb.append('\n');
 			return;
 		}else {
 			
@@ -40,6 +43,7 @@ public class Main {
 		BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
 		StringTokenizer st = new StringTokenizer(br.readLine());
 		
+		
 		// N 범위
 		// M 수
 		N = Integer.parseInt(st.nextToken());
@@ -50,7 +54,7 @@ public class Main {
 		
 		dfs(0);
 		
-		
+		System.out.println(sb);
 	}
 
 }
