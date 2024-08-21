@@ -11,11 +11,6 @@ public class Solution {
 	
 	static StringBuilder sb = new StringBuilder();
 	
-	static int dir;
-	// 상 하 좌 우
-	static int[] dy = {-1, 1, 0, 0};
-	static int[] dx = {0, 0, -1, 1};
-	
 	static int map[][];
 	
 	static int N;
@@ -45,39 +40,35 @@ public class Solution {
 			int[] input = new int[N];
 			switch (command) {
 			case "up":
-				dir = 0;
 				for (int i = 0; i < N; i++) {
 					for (int j = 0; j < N; j++) {
 						input[j] = map[j][i];
 					}
-					slide(input, i, 0);
+					slide(input, i, 0, 0);
 				}
 				break;
 			case "down":
-				dir = 1;
 				for (int i = 0; i < N; i++) {
 					for (int j = N-1; j >= 0; j--) {
 						input[N-j-1] = map[j][i];
 					}
-					slide(input, i, N-1);
+					slide(input, i, N-1, 1);
 				}
 				break;
 			case "left":
-				dir = 2;
 				for (int i = 0; i < N; i++) {
 					for (int j = 0; j < N; j++) {
 						input[j] = map[i][j];
 					}
-					slide(input, 0, i);
+					slide(input, 0, i, 2);
 				}
 				break;
 			case "right":
-				dir = 3;
 				for (int i = 0; i < N; i++) {
 					for (int j = N-1; j >= 0; j--) {
 						input[N-j-1] = map[i][j];
 					}
-					slide(input, N-1, i);
+					slide(input, N-1, i, 3);
 				}
 				break;
 			default:
@@ -101,7 +92,7 @@ public class Solution {
 	
 	
 	
-	static void slide (int[] list, int x, int y) {
+	static void slide (int[] list, int x, int y, int dir) {
 		
 		ArrayDeque<Integer> q = new ArrayDeque<>();
 		for(int i = 0;i < list.length;i++) if(list[i] != 0) q.addLast(list[i]);
