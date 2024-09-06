@@ -5,6 +5,7 @@ import java.util.ArrayDeque;
 import java.util.Queue;
 import java.util.StringTokenizer;
 
+// 중복된 탐색을 하지 않도록 최적화
 public class Solution {
 
 	static StringBuilder sb = new StringBuilder();
@@ -31,14 +32,30 @@ public class Solution {
 				adjMartix[a][b] = 1;
 			}
 
-			int ans = 0; // 자신의 키를 알 수 있는 학생 수
-
-			// 각 학생마다 자신보다 큰, 자신보다 작은 학생 각각 탐색
+			// 초기화
 			for (int i = 1; i <= N; i++) {
-				cnt = 0;
-				gtDFS(i, new boolean[N+1]);
-				ltDFS(i, new boolean[N+1]);
-				if (cnt == N-1) ans++;
+				adjMartix[i][0] = -1; // 탐색되지 않은 학생을 나타냄 (후에 탐색이 완료되면 자신보다 큰 학생 수 저장)
+				//adjMartix[0][i] = -1; // 탐색되지 않은 학생을 나타냄 (후에 탐색이 완료되면 자신보다 작은 학생 수 저장)
+			}
+
+
+			for (int i = 1; i <= N; i++) {
+				// 자기 기준으로 탐색을 시킬 건데
+				// 아직 탐색되지 않은 학생일 때 진입할 예정이기에
+				if (adjMartix[i][0] != -1) continue;
+				gtDFS(i);
+			}
+			
+			for (int i = 1; i <= N; i++) {
+				for (int j = 1; j <= N; j++) {
+					adjMartix[0][j] += adjMartix[i][j];
+				}
+			}
+			
+			int ans = 0; // 자신의 키를 알 수 있는 학생 수
+			for (int k = 1; k <= N; k++) {
+				// 인접 행렬의 k행 0열과 0행의 k열
+				if (adjMartix[k][0] + adjMartix[0][k] == N-1) ans++;
 			}
 
 			sb.append('#').append(t).append(' ').append(ans).append('\n');
@@ -47,33 +64,32 @@ public class Solution {
 	} // main end
 
 	// 자신보다 큰 쪽으로 따라 탐색
-	private static void gtDFS(int cur, boolean[] visited) {
+	private static void gtDFS(int cur) {
 
-		visited[cur] = true;
 		for (int i = 1; i <= N; i++) {
-			// 나보다 큰 애
-			if (!visited[i] && adjMartix[cur][i] != 0) {
-				gtDFS(i, visited);
-				cnt++; // 나보다 큰 대상 카운팅
+			if (adjMartix[cur][i] == 0)
+				continue; // 나랑 관련 없는 애들 continue
+
+			if (adjMartix[i][0] == -1) { // 탐색되지 않은 학생이므로 탐색
+				gtDFS(i);
+			}
+
+			// 나보다 키가 큰 학생이 탐색을 완료한 상태
+			// i보다 키가 큰 학생이 있다면 그 학생들의 정보를 cur에세 반영 (간접 관계를 직접 관계로 경로 압축)
+			if (adjMartix[i][0] > 0) { // 나보다 큰 학생이 있을 때만 비교
+				for (int j = 1; j <= N; j++) {
+					// i가 나보다 큰 애
+					if (adjMartix[i][j] != 0)
+						adjMartix[cur][j] = 1;
+				}
 			}
 		}
- 
+
+		adjMartix[cur][0] = 0;	// 초기값이 -1이므로 누적 위해 0으로 초기화
+		for (int k = 1; k <= N; k++) {
+			adjMartix[cur][0] += adjMartix[cur][k];
+		}
+
 	} // gtDFS end
-
-	// 자신보다 작은 쪽으로 따라 탐색
-	// 열로 접근
-	private static void ltDFS(int cur, boolean[] visited) {
-
-		visited[cur] = true;
-		
-		for (int i = 1; i <= N; i++) {
-			// 나보다 큰 애
-			if (!visited[i] && adjMartix[i][cur] != 0) {
-				ltDFS(i, visited);
-				cnt++; // 나보다 큰 대상 카운팅
-			}
-		}
-
-	} // ltDFS end
 
 } // class end
