@@ -66,13 +66,17 @@ public class Main {
             }
         }
         
-        bfs();
+        // babytomato가 있다면
+        if (babytomato > 0) {
+        	bfs();
+        }
         
+        // bfs 탐색 후 남은 안 익은 토마토가 있다면 
         if (babytomato > 0) {
         	result = -1;
         	System.out.println(result);
         }else {
-        	System.out.println(result-1);
+        	System.out.println(result);
         }
         
     }
@@ -110,9 +114,8 @@ public class Main {
             }    // level end
             cnt++;
             if (babytomato == 0) {
-                result = Math.max(result, cnt);
-                
-
+            	result = Math.max(result, cnt);
+            	return;
             }
         }    // while isEmpty end
     }    // bfs end
