@@ -26,9 +26,10 @@ public class Main {
 			while(true) {
 				
 				if (num == N) break;
-				if (isVisited[gamer[num]]) break;
-				
 				num = gamer[num];
+				
+				if (isVisited[num]) break;
+				
 				cnt++;
 				isVisited[num] = true;
 				
