@@ -17,19 +17,15 @@ public class Main {
 		}
 		// 입력 받기 끝 
 		
-		map[N-1] = 1;
-		
-		int result = map[N-1];
-		for(int i = N-2; i >= 0; i--) {
-			int tmp = map[i] + 1;
-			
-			if (map[i+1] + 1 >= map[i]) {
-				//그대로유지 
+		long speed = 1;
+		long result = 1;
+		for(int i = N-2; i >= 0; i--) {			
+			if (speed < map[i]){
+				speed++;
 			}else {
-				map[i] = map[i+1] + 1;
+				speed = map[i];
 			}
-			
-			result += map[i];
+			result += speed;
 		}
 		
 		System.out.println(result);
